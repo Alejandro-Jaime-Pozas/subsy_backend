@@ -1,8 +1,9 @@
-# name of the tag; py version 3.10, alpine is a lightweight version of python
+# name of the tag; py version 3.10, alpine is a linux based lightweight version of python
 FROM python:3.10-alpine3.19
 LABEL maintainer="https://portfolio-alejandro-jaime.web.app/"
 
-ENV PYTHONUNBUFFERED 1
+# sets python unbuffered to true so that python logs are directly displayed when container is running
+ENV PYTHONUNBUFFERED=1
 
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./app /app
@@ -20,4 +21,4 @@ RUN python -m venv /py && \
 
 ENV PATH="/py/bin:$PATH"
 
-USER django-user 
+USER django-user
