@@ -14,11 +14,17 @@ EXPOSE 8000
 ARG DEV=false
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
+    # apk lines reference python-postgres adaptor dependencies req for this alpine image so that postgres can work in this image
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     rm -rf /tmp && \
+    # this below deletes all virtual deps from above within same command ie build-base, etc
+    apk del .tmp-build-deps && \
     adduser \
         --disabled-password \
         --no-create-home \
