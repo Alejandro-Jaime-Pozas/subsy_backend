@@ -40,6 +40,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    objects = UserManager()  # this is how to assign a Manager to a model
+    objects = UserManager()  # This assigns UserManager to manage the User model, providing methods to create users and superusers.
 
-    USERNAME_FIELD = 'email'  # this to set email as username field
+    USERNAME_FIELD = 'email'  # This sets the field used for authentication to be the email address instead of the default username.
