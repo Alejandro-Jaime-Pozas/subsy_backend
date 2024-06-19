@@ -43,3 +43,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()  # This assigns UserManager to manage the User model, providing methods to create users and superusers.
 
     USERNAME_FIELD = 'email'  # This sets the field used for authentication to be the email address instead of the default username.
+
+
+class Company(models.Model):
+    # TODO create the name field based on the domain name from the user's email IF user checks the option for 'company you're using for subsy is the same as your email domain?'
+    """Company in the system."""
+    name = models.CharField(max_length=255, blank=False)  # in theory this should not allow blank strings as input, therefore no null values will exist in db
+    domain = models.CharField(max_length=255, blank=False)
