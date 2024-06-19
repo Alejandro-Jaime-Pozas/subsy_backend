@@ -14,9 +14,11 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         """Create, save and return a new user."""
-        user = self.model(email=email, **extra_fields)
+        if not email:
+            raise ValueError('User must have an email address.')
+        user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        user.save(using=self._db)  # this supports adding multiple dbs if needed (best practice)
 
         return user
 
@@ -28,6 +30,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    objects = UserManager()  # this is how to assign a Manager for a model
+    objects = UserManager()  # this is how to assign a Manager to a model
 
     USERNAME_FIELD = 'email'  # this to set email as username field
