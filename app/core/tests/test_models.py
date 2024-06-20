@@ -1,16 +1,32 @@
 """
 Tests for models.
 """
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from core.models import (
     Company,
-    
+    LinkedBank,
+    # BankAccount,
+    # Transaction,
+    # Application,
+    # Subscription,
+    # Tag,
 )
+
+
+def create_user():
+    user = get_user_model().objects.create_user(
+        email='test@example.com',
+        password='testpass123'
+    )
+    return user
 
 
 class ModelTests(TestCase):
     """Test models."""
+
+    def setUp(self):
+        self.client = Client()
 
     # USER
 
@@ -71,6 +87,24 @@ class ModelTests(TestCase):
 
 
     # LINKED_BANK
+
+    def test_create_linked_bank_successful(self):
+        """Test creating a linked bank account (plaid item) is successful
+        and that the bank's web portal is active.
+        """
+        name = 'test_linked_bank'
+        web_portal_url = 'https://www.example.com'
+        response = self.client.get(web_portal_url)
+
+        linked_bank = LinkedBank.objects.create(
+            name=name,
+            web_portal_url=web_portal_url,
+        )
+
+        self.assertEqual(linked_bank.name, name)
+        self.assertEqual(linked_bank.web_portal_url, web_portal_url)
+        self.assertGreaterEqual(response.status_code, 200)
+        self.assertLess(response.status_code, 300)
 
     # BANK_ACCOUNT
 

@@ -46,7 +46,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Company(models.Model):
-    # TODO create the name field based on the domain name from the user's email IF user checks the option for 'company you're using for subsy is the same as your email domain?'
+    # TODO create the name field based on the domain name from the user's email IF user checks the option for 'company you're using for subsy is the same as your email domain?'; should maybe make the name unique, since there should really only be unique companies...based on unique domains...
     """Company in the system."""
     name = models.CharField(max_length=255, blank=False)  # in theory this should not allow blank strings as input, therefore no null values will exist in db
-    domain = models.CharField(max_length=255, blank=False)
+    domain = models.CharField(max_length=255, blank=False, unique=True)
+
+
+class LinkedBank(models.Model):
+    """Linked Bank (plaid item) in the system."""
+    name = models.CharField(max_length=255)
+    web_portal_url = models.URLField(max_length=5000)  # maybe a better way to acct for long urls?
+
+
+class BankAccount(models.Model):
+    """Bank account in the system."""
+    name = models.CharField(max_length=255, blank=False)
+    
