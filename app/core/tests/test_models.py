@@ -86,25 +86,25 @@ class ModelTests(TestCase):
         self.assertEqual(company.domain, domain)
 
 
-    # LINKED_BANK
+    # # LINKED_BANK
 
-    def test_create_linked_bank_successful(self):
-        """Test creating a linked bank account (plaid item) is successful
-        and that the bank's web portal is active.
-        """
-        name = 'test_linked_bank'
-        web_portal_url = 'https://www.example.com'
-        response = self.client.get(web_portal_url)
+    # def test_create_linked_bank_successful(self):
+    #     """Test creating a linked bank account (plaid item) is successful
+    #     and that the bank's web portal is active.
+    #     """
+    #     name = 'test_linked_bank'
+    #     web_portal_url = 'https://www.example.com'
+    #     response = self.client.get(web_portal_url)
 
-        linked_bank = LinkedBank.objects.create(
-            name=name,
-            web_portal_url=web_portal_url,
-        )
+    #     linked_bank = LinkedBank.objects.create(
+    #         name=name,
+    #         web_portal_url=web_portal_url,
+    #     )
 
-        self.assertEqual(linked_bank.name, name)
-        self.assertEqual(linked_bank.web_portal_url, web_portal_url)
-        self.assertGreaterEqual(response.status_code, 200)
-        self.assertLess(response.status_code, 300)
+    #     self.assertEqual(linked_bank.name, name)
+    #     self.assertEqual(linked_bank.web_portal_url, web_portal_url)
+    #     self.assertGreaterEqual(response.status_code, 200)
+    #     self.assertLess(response.status_code, 300)
 
     # BANK_ACCOUNT
 

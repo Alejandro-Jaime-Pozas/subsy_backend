@@ -12,7 +12,7 @@ import datetime
 
 
 class UserManager(BaseUserManager):
-    """Manager for users."""
+    """Manager for User."""
 
     def create_user(self, email, password=None, **extra_fields):
         """Create, save and return a new user."""
@@ -35,7 +35,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """User in the system."""
+    """User in the db system."""
     email = models.EmailField(max_length=255, unique=True, blank=False)
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
@@ -52,19 +52,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Company(models.Model):
     # TODO create the name field based on the domain name from the user's email IF user checks the option for 'company you're using for subsy is the same as your email domain?'; should maybe make the name unique, since there should really only be unique companies...based on unique domains...
-    """Company in the system."""
+    """Company in the db system."""
     name = models.CharField(max_length=255, blank=False)  # in theory this should not allow blank strings as input, therefore no null values will exist in db
     domain = models.CharField(max_length=255, blank=False, unique=True)
 
 
 class LinkedBank(models.Model):
-    """Linked Bank (plaid item) in the system."""
+    """Linked Bank (plaid item) in the db system."""
     name = models.CharField(max_length=255)
     web_portal_url = models.URLField(max_length=5000)  # maybe a better way to acct for long urls?
 
 
 class BankAccount(models.Model):
-    """Bank account in the system."""
+    """Bank account in the db system."""
     name = models.CharField(max_length=255, blank=False)
     routing_number = models.CharField(max_length=9)
     account_number = models.CharField(max_length=17)
@@ -73,7 +73,7 @@ class BankAccount(models.Model):
 
 
 class Transaction(models.Model):
-    """Transaction (cash in or cash out) in the system."""
+    """Transaction (cash in or cash out) in the db system."""
     merchant = models.CharField(max_length=255, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)  # CHANGE TO BANK INPUT
     amount = models.DecimalField(max_digits=52, decimal_places=2)
@@ -81,7 +81,7 @@ class Transaction(models.Model):
 
 class Application(models.Model):
     """
-    Software application/platform in the system.
+    Software application/platform in the db system.
     i.e. Netflix, Spotify are applications.
     """
     name = models.CharField(max_length=255)
@@ -90,7 +90,7 @@ class Application(models.Model):
 
 class Subscription(models.Model):
     """
-    Subscription in the system. A subscription is a software platform
+    Subscription in the db system. A subscription is a software platform
     of some form that the company subscribes to in a given, possibly
     interrupted time period.
     """
@@ -109,6 +109,6 @@ class Subscription(models.Model):
 
 
 class Tag(models.Model):
-    """Tag in the system. Multi-purpose tag for use in grouping/filtering."""
+    """Tag in the db system. Multi-purpose tag for use in grouping/filtering."""
     pass
     # name = models.
