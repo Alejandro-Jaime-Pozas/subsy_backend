@@ -106,7 +106,8 @@ class ModelTests(TestCase):
 
     # if super user check True is_active and is_superuser and is_staff
     def test_create_superuser(self):
-        """Test creating a superuser."""
+        """Test creating a superuser is successfull and is_active,
+        is_superuser both True."""
         user = get_user_model().objects.create_superuser(
             'test@example.com',
             'test12',
