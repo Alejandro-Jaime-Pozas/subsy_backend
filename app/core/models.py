@@ -16,12 +16,7 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         """Create, save and return a new user."""
-        try:
-            validate_email(email)
-        except ValidationError:
-            return 'User email is not valid.'
-        if not email:
-            raise ValueError('User must have an email address.')
+        validate_email(email)
         user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)  # this supports adding multiple dbs if needed (best practice)
@@ -50,8 +45,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'  # This sets the field used for authentication to be the email address instead of the default username.
 
-    # def __str__(self) -> str:
-    #     return f'<User {self.id}|{self.email}>'
+    def __str__(self) -> str:
+        return f'<User {self.id}|{self.email}>'
 
 
 class Company(models.Model):
@@ -59,6 +54,9 @@ class Company(models.Model):
     """Company in the db system."""
     name = models.CharField(max_length=255, blank=False)  # in theory this should not allow blank strings as input, therefore no null values will exist in db
     domain = models.CharField(max_length=255, blank=False, unique=True)
+
+    # def __str__(self) -> str:
+    #     return f'<Company {self.id}|{self.email}>'
 
 
 class LinkedBank(models.Model):

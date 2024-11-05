@@ -4,6 +4,7 @@ Tests for models.
 from django.test import TestCase, Client
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from django.db.utils import IntegrityError
 
 from core.models import (
     Company,
@@ -45,12 +46,6 @@ class ModelTests(TestCase):
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password), password)
 
-    # # must have email
-    # def test_new_user_without_email_raises_error(self):
-    #     """Test that creating a user without an email raises a ValueError."""
-    #     with self.assertRaises(ValueError):
-    #         get_user_model().objects.create_user('', 'test1234')
-
     # email must be normalized
     def test_new_user_email_normalized(self):
         """Test email is normalized for new users."""
@@ -68,24 +63,32 @@ class ModelTests(TestCase):
 
     # email must be valid
     def test_email_is_not_valid(self):
-        """Test user email input is valid."""
+        """Test user email input is not valid."""
         sample_bad_emails = [
+            '',
             'test_string',
             'test_no_domain@',
             'test_no_at_symbol.com',
             '@test_no_input_before_at.com',
         ]
-        # THIS IS CREATING THE EMAILS, NO CHECK FOR EMAIL FORMAT, FIX!
         for email in sample_bad_emails:
             # user should NOT be created with invalid email
-            user = get_user_model().objects.create_user(
-                email=email,
-                password='testpass123'
-            )
-            print(user)
-            self.assertEqual(user.email, email)
+            with self.assertRaises(ValidationError):
+                get_user_model().objects.create_user(
+                    email=email,
+                    password='testpass123'
+                )
 
     # email must be unique
+    def test_email_must_be_unique(self):
+        """Test that checks if email is unique by creating email duplicate."""
+        user1 = create_user()
+        with self.assertRaises(IntegrityError):
+            get_user_model().objects.create_user(
+                email='test@example.com',
+                password='testpass456'
+            )
+
     # optional password
     # if password, check password is hashed, not raw password
     # can have any number of extra fields, can be random
