@@ -5,6 +5,7 @@ from django.test import TestCase, Client
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.db.utils import IntegrityError
+from django.forms.models import model_to_dict
 
 from core.models import (
     Company,
@@ -31,7 +32,7 @@ class ModelTests(TestCase):
 
     # USER TESTS
 
-    # test base success case
+    # test base success case user created and is active
     def test_create_user_with_email_successful(self):
         """ Test creating a user with an email is successful,
             and hashed password is correct.
@@ -45,6 +46,9 @@ class ModelTests(TestCase):
 
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password), password)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
 
     # email must be normalized
     def test_new_user_email_normalized(self):
@@ -62,7 +66,7 @@ class ModelTests(TestCase):
             self.assertEqual(user.email, expected)
 
     # email must be valid
-    def test_email_is_not_valid(self):
+    def test_email_not_valid(self):
         """Test user email input is not valid."""
         sample_bad_emails = [
             '',
@@ -90,11 +94,17 @@ class ModelTests(TestCase):
             )
 
     # optional password
-    # if password, check password is hashed, not raw password
-    # can have any number of extra fields, can be random
-    # can be a superuser
-    # if super user check True is_active and is_superuser
+    def test_password_is_optional(self):
+        """Test the password is optional field."""
+        email='test@example.com'
+        password=None
+        user = get_user_model().objects.create_user(
+            email=email,
+            password=password
+        )
+        self.assertFalse(user.check_password(password))
 
+    # if super user check True is_active and is_superuser and is_staff
     def test_create_superuser(self):
         """Test creating a superuser."""
         user = get_user_model().objects.create_superuser(
@@ -104,6 +114,7 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
 
     def test_user_extra_fields_successful(self):
         """Test extra fields are accepted when user object instance created."""

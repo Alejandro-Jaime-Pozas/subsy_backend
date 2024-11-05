@@ -59,58 +59,58 @@ class Company(models.Model):
     #     return f'<Company {self.id}|{self.email}>'
 
 
-class LinkedBank(models.Model):
-    """Linked Bank (plaid item) in the db system."""
-    name = models.CharField(max_length=255)
-    web_portal_url = models.URLField(max_length=5000)  # maybe a better way to acct for long urls?
+# class LinkedBank(models.Model):
+#     """Linked Bank (plaid item) in the db system."""
+#     name = models.CharField(max_length=255)
+#     web_portal_url = models.URLField(max_length=5000)  # maybe a better way to acct for long urls?
 
 
-class BankAccount(models.Model):
-    """Bank account in the db system."""
-    name = models.CharField(max_length=255, blank=False)
-    routing_number = models.CharField(max_length=9)
-    account_number = models.CharField(max_length=17)
-    balance = models.DecimalField(max_digits=52, decimal_places=2, default=0)  # this should prob becaome a class property later with @ symbol...since it requires freq updates
-    account_type = models.CharField(max_length=255)
+# class BankAccount(models.Model):
+#     """Bank account in the db system."""
+#     name = models.CharField(max_length=255, blank=False)
+#     routing_number = models.CharField(max_length=9)
+#     account_number = models.CharField(max_length=17)
+#     balance = models.DecimalField(max_digits=52, decimal_places=2, default=0)  # this should prob becaome a class property later with @ symbol...since it requires freq updates
+#     account_type = models.CharField(max_length=255)
 
 
-class Transaction(models.Model):
-    """Transaction (cash in or cash out) in the db system."""
-    merchant = models.CharField(max_length=255, blank=True, null=True)
-    timestamp = models.DateTimeField(auto_now_add=True)  # CHANGE TO BANK INPUT
-    amount = models.DecimalField(max_digits=52, decimal_places=2)
+# class Transaction(models.Model):
+#     """Transaction (cash in or cash out) in the db system."""
+#     merchant = models.CharField(max_length=255, blank=True, null=True)
+#     timestamp = models.DateTimeField(auto_now_add=True)  # CHANGE TO BANK INPUT
+#     amount = models.DecimalField(max_digits=52, decimal_places=2)
 
 
-class Application(models.Model):
-    """
-    Software application/platform in the db system.
-    i.e. Netflix, Spotify are applications.
-    """
-    name = models.CharField(max_length=255)
-    domain_url = models.URLField(max_length=5000)
+# class Application(models.Model):
+#     """
+#     Software application/platform in the db system.
+#     i.e. Netflix, Spotify are applications.
+#     """
+#     name = models.CharField(max_length=255)
+#     domain_url = models.URLField(max_length=5000)
 
 
-class Subscription(models.Model):
-    """
-    Subscription in the db system. A subscription is a software platform
-    of some form that the company subscribes to in a given, possibly
-    interrupted time period.
-    """
-    PAYMENT_PERIOD_CHOICES = [
-        ('D', 'Daily'),
-        ('W', 'Weekly'),
-        ('M', 'Monthly'),
-        ('Q', 'Quarterly'),
-        ('Y', 'Yearly'),
-    ]
+# class Subscription(models.Model):
+#     """
+#     Subscription in the db system. A subscription is a software platform
+#     of some form that the company subscribes to in a given, possibly
+#     interrupted time period.
+#     """
+#     PAYMENT_PERIOD_CHOICES = [
+#         ('D', 'Daily'),
+#         ('W', 'Weekly'),
+#         ('M', 'Monthly'),
+#         ('Q', 'Quarterly'),
+#         ('Y', 'Yearly'),
+#     ]
 
-    start_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=True)
-    payment_period = models.CharField(default='monthly', choices=PAYMENT_PERIOD_CHOICES)
+#     start_date = models.DateTimeField(auto_now_add=True)
+#     end_date = models.DateTimeField(auto_now_add=True)
+#     active = models.BooleanField(default=True)
+#     payment_period = models.CharField(default='monthly', choices=PAYMENT_PERIOD_CHOICES)
 
 
-class Tag(models.Model):
-    """Tag in the db system. Multi-purpose tag for use in grouping/filtering."""
-    pass
-    # name = models.
+# class Tag(models.Model):
+#     """Tag in the db system. Multi-purpose tag for use in grouping/filtering."""
+#     pass
+#     # name = models.
