@@ -126,9 +126,16 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_active)
 
-    def test_user_extra_fields_successful(self):
-        """Test extra fields are accepted when user object instance created."""
-
+    def test_user_extra_fields_raise_type_error(self):
+        """Test extra fields are accepted as params in UserManager
+        but raise type error in user creation model
+        (since fields not set in user model)."""
+        with self.assertRaises(TypeError):
+            get_user_model().objects.create_user(
+                email='test@example.com',
+                extra_field_1=500,
+                extra_field_2=['a','b']
+            )
 
 
     # COMPANY
