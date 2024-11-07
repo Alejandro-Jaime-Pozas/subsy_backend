@@ -3,7 +3,7 @@ Database models.
 """
 from django.db import models
 from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -17,6 +17,8 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Create, save and return a new user."""
         validate_email(email)
+        if password:
+            validate_password(password)
         user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)  # this supports adding multiple dbs if needed (best practice)
@@ -28,7 +30,7 @@ class UserManager(BaseUserManager):
         superuser = self.create_user(email, password, **extra_fields)
         superuser.is_staff = True
         superuser.is_superuser = True
-        superuser.save(using=self._db)
+        superuser.save(using=self._db)  # self._db is a BaseManager variable
 
         return superuser
 

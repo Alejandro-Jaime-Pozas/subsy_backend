@@ -61,7 +61,7 @@ class ModelTests(TestCase):
             ('test4@example.COM', 'test4@example.com'),
         ]
         for email, expected in sample_emails:
-            user = get_user_model().objects.create_user(email, 'sample123')
+            user = get_user_model().objects.create_user(email, 'testpass123')
 
             self.assertEqual(user.email, expected)
 
@@ -104,13 +104,22 @@ class ModelTests(TestCase):
         )
         self.assertFalse(user.check_password(password))
 
+    # minimum password length should be 8 chars
+    def test_minimum_password_length(self):
+        """Test the minimum password length is 8 chars."""
+        with self.assertRaises(ValidationError):
+            get_user_model().objects.create_user(
+                email='test@example.com',
+                password='a234567'
+            )
+
     # if super user check True is_active and is_superuser and is_staff
     def test_create_superuser(self):
         """Test creating a superuser is successfull and is_active,
         is_superuser both True."""
         user = get_user_model().objects.create_superuser(
             'test@example.com',
-            'test12',
+            'testpass123',
         )
 
         self.assertTrue(user.is_superuser)
