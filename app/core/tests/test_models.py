@@ -152,11 +152,19 @@ class ModelTests(TestCase):
         self.assertEqual(company.domain, self.company_domain)
 
     # name and domain must be filled out
-    def test_name_domain_are_not_null(self):
-        """Test that name and domain fields are not blank."""
+    def test_name_not_null(self):
+        """Test that name field is not null."""
+        with self.assertRaises(IntegrityError):
+            company = Company.objects.create(
+                name=None,
+                domain=self.company_domain
+            )
+
+    def test_domain_not_null(self):
+        """Test the domain field is not null."""
         with self.assertRaises(IntegrityError):
             Company.objects.create(
-                name=None,
+                name=self.company_name,
                 domain=None
             )
 
