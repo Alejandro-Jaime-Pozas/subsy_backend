@@ -139,15 +139,39 @@ class ModelTests(TestCase):
 
 
     # COMPANY
+    company_name = 'test_company'
+    company_domain = 'example.com'
 
     def test_create_company_successful(self):
         """Test creating a company is successful."""
-        name = 'test_company'
-        domain = 'example.com'
-        company = Company.objects.create(name=name, domain=domain)
+        company = Company.objects.create(
+            name=self.company_name,
+            domain=self.company_domain
+        )
+        self.assertEqual(company.name, self.company_name)
+        self.assertEqual(company.domain, self.company_domain)
 
-        self.assertEqual(company.name, name)
-        self.assertEqual(company.domain, domain)
+    # name and domain must be filled out
+    def test_name_domain_are_not_null(self):
+        """Test that name and domain fields are not blank."""
+        with self.assertRaises(IntegrityError):
+            Company.objects.create(
+                name=None,
+                domain=None
+            )
+
+    # domain must be unique
+    def test_domain_is_unique(self):
+        """Test the company domain is unique."""
+        company = Company.objects.create(
+            name=self.company_name,
+            domain=self.company_domain
+        )
+        with self.assertRaises(IntegrityError):
+            Company.objects.create(
+                name='second company',
+                domain=self.company_domain
+            )
 
 
     # # LINKED_BANK
