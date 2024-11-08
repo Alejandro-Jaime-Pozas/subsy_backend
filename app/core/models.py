@@ -52,13 +52,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Company(models.Model):
-    # TODO create the name field based on the domain name from the user's email IF user checks the option for 'company you're using for subsy is the same as your email domain?'; should maybe make the name unique, since there should really only be unique companies...based on unique domains...
+    # TODO
+        # create the name field based on the domain name from the user's email; should maybe make the name unique, since there should really only be unique companies...based on unique domains...
+        # maybe add more fields included from hunter.io API when integrating? like company sector/description?
     """Company in the db system."""
     name = models.CharField(max_length=255, blank=False)  # in theory this should not allow blank strings as input, therefore no null values will exist in db
     domain = models.CharField(max_length=255, blank=False, unique=True)
 
-    # def __str__(self) -> str:
-    #     return f'<Company {self.id}|{self.email}>'
+    def __str__(self) -> str:
+        return f'<Company {self.id}|{self.name}|{self.domain}>'
 
 
 # class LinkedBank(models.Model):
