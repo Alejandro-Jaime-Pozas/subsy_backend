@@ -59,6 +59,7 @@ class Company(models.Model):
     the same name but different domains."""
     name = models.CharField(max_length=255, blank=False)  # in theory this should not allow blank strings as input IN FORMS only, but does allow blanks if input directly into model instance
     domain = models.CharField(max_length=255, blank=False, unique=True)
+    users = models.ManyToManyField(User)
 
     def __repr__(self) -> str:
         return f'<Company {self.id}|{self.name}|{self.domain}>'
