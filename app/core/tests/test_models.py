@@ -142,6 +142,7 @@ class ModelTests(TestCase):
     company_name = 'test_company'
     company_domain = 'example.com'
 
+    # create company is successful
     def test_create_company_successful(self):
         """Test creating a company is successful."""
         company = Company.objects.create(
@@ -151,7 +152,7 @@ class ModelTests(TestCase):
         self.assertEqual(company.name, self.company_name)
         self.assertEqual(company.domain, self.company_domain)
 
-    # name and domain must be filled out
+    # name must be filled out
     def test_name_not_null(self):
         """Test that name field is not null."""
         with self.assertRaises(IntegrityError):
@@ -160,6 +161,7 @@ class ModelTests(TestCase):
                 domain=self.company_domain
             )
 
+    # domain must be filled out
     def test_domain_not_null(self):
         """Test the domain field is not null."""
         with self.assertRaises(IntegrityError):
@@ -182,12 +184,12 @@ class ModelTests(TestCase):
             )
 
 
-    # # LINKED_BANK
+    # LINKED_BANK
 
+    # # create LinkedBank is successful
     # def test_create_linked_bank_successful(self):
     #     """Test creating a linked bank account (plaid item) is successful
-    #     and that the bank's web portal is active.
-    #     """
+    #     and that the bank's web portal is active."""
     #     name = 'test_linked_bank'
     #     web_portal_url = 'https://www.example.com'
     #     response = self.client.get(web_portal_url)
@@ -199,6 +201,16 @@ class ModelTests(TestCase):
 
     #     self.assertEqual(linked_bank.name, name)
     #     self.assertEqual(linked_bank.web_portal_url, web_portal_url)
+
+    # def test_create_linked_bank_successful(self):
+    #     """Test creating a linked bank account (plaid item) is successful
+    #     and that the bank's web portal is active."""
+    #     response = self.client.get(web_portal_url)
+
+    #     linked_bank = LinkedBank.objects.create(
+    #         name=name,
+    #         web_portal_url=web_portal_url,
+    #     )
     #     self.assertGreaterEqual(response.status_code, 200)
     #     self.assertLess(response.status_code, 300)
 
