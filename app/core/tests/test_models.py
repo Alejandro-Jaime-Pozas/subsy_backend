@@ -184,6 +184,18 @@ class ModelTests(TestCase):
                 domain=self.company_domain
             )
 
+    # test creating relationship to user is successful
+    def test_user_relation_success(self):
+        """Test creating a user relation is successful."""
+        user = create_user()
+        company = Company.objects.create(
+            name=self.company_name,
+            domain=self.company_domain
+        )
+        company.users.add(user)
+        self.assertEqual(company.users.get(pk=user.pk).email, user.email)
+        self.assertEqual(user.company_set.get(pk=company.pk).pk, company.pk)
+
 
     # LINKED_BANK
 
