@@ -43,7 +43,6 @@ class ModelTests(TestCase):
             email=email,
             password=password
         )
-
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password), password)
         self.assertTrue(user.is_active)
@@ -126,6 +125,7 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_active)
 
+    # if extra fields passed to create_user, they should be valid though will raise error since User model does not allow for those fields
     def test_user_extra_fields_raise_type_error(self):
         """Test extra fields are accepted as params in UserManager
         but raise type error in user creation model
@@ -139,6 +139,7 @@ class ModelTests(TestCase):
 
 
     # COMPANY
+
     company_name = 'test_company'
     company_domain = 'example.com'
 
