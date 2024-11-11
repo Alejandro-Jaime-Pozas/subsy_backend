@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 
 from core.models import (
     Company,
-    # LinkedBank,
+    LinkedBank,
     # BankAccount,
     # Transaction,
     # Application,
@@ -199,33 +199,20 @@ class ModelTests(TestCase):
 
     # LINKED_BANK
 
-    # # create LinkedBank is successful
-    # def test_create_linked_bank_successful(self):
-    #     """Test creating a linked bank account (plaid item) is successful
-    #     and that the bank's web portal is active."""
-    #     name = 'test_linked_bank'
-    #     web_portal_url = 'https://www.example.com'
-    #     response = self.client.get(web_portal_url)
+    linked_bank_name = 'test_linked_bank'
+    linked_bank_url = 'https://www.example.com'
 
-    #     linked_bank = LinkedBank.objects.create(
-    #         name=name,
-    #         web_portal_url=web_portal_url,
-    #     )
+    # create LinkedBank is successful
+    def test_create_linked_bank_successful(self):
+        """Test creating a linked bank account (plaid item) is successful
+        and that the bank's web portal is active."""
+        linked_bank = LinkedBank.objects.create(
+            name=self.linked_bank_name,
+            web_portal_url=self.linked_bank_url,
+        )
+        self.assertEqual(linked_bank.name, self.linked_bank_name)
+        self.assertEqual(linked_bank.web_portal_url, self.linked_bank_url)
 
-    #     self.assertEqual(linked_bank.name, name)
-    #     self.assertEqual(linked_bank.web_portal_url, web_portal_url)
-
-    # def test_create_linked_bank_successful(self):
-    #     """Test creating a linked bank account (plaid item) is successful
-    #     and that the bank's web portal is active."""
-    #     response = self.client.get(web_portal_url)
-
-    #     linked_bank = LinkedBank.objects.create(
-    #         name=name,
-    #         web_portal_url=web_portal_url,
-    #     )
-    #     self.assertGreaterEqual(response.status_code, 200)
-    #     self.assertLess(response.status_code, 300)
 
     # BANK_ACCOUNT
 
