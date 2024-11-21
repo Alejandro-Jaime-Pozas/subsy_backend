@@ -1,15 +1,15 @@
 """
 Tests for models.
 """
-from django.test import TestCase, Client
+from django.test import TestCase  # , Client
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.db.utils import IntegrityError
-from django.forms.models import model_to_dict
+# from django.forms.models import model_to_dict
 
 from core.models import (
     Company,
-    LinkedBank,
+    # LinkedBank,
     # BankAccount,
     # Transaction,
     # Application,
@@ -85,7 +85,7 @@ class ModelTests(TestCase):
     # email must be unique
     def test_email_must_be_unique(self):
         """Test that checks if email is unique by creating email duplicate."""
-        user1 = create_user()
+        create_user()
         with self.assertRaises(IntegrityError):
             get_user_model().objects.create_user(
                 email='test@example.com',
@@ -95,8 +95,8 @@ class ModelTests(TestCase):
     # optional password
     def test_password_is_optional(self):
         """Test the password is optional field."""
-        email='test@example.com'
-        password=None
+        email = 'test@example.com'
+        password = None
         user = get_user_model().objects.create_user(
             email=email,
             password=password
@@ -134,9 +134,8 @@ class ModelTests(TestCase):
             get_user_model().objects.create_user(
                 email='test@example.com',
                 extra_field_1=500,
-                extra_field_2=['a','b']
+                extra_field_2=['a', 'b'],
             )
-
 
     # COMPANY
 
@@ -157,9 +156,9 @@ class ModelTests(TestCase):
     def test_name_not_null(self):
         """Test that name field is not null."""
         with self.assertRaises(IntegrityError):
-            company = Company.objects.create(
+            Company.objects.create(
                 name=None,
-                domain=self.company_domain
+                domain=self.company_domain,
             )
 
     # domain must be filled out
@@ -174,7 +173,7 @@ class ModelTests(TestCase):
     # domain must be unique
     def test_domain_is_unique(self):
         """Test the company domain is unique."""
-        company = Company.objects.create(
+        Company.objects.create(
             name=self.company_name,
             domain=self.company_domain
         )
@@ -196,7 +195,6 @@ class ModelTests(TestCase):
         self.assertEqual(company.users.get(pk=user.pk).email, user.email)
         self.assertEqual(user.company_set.get(pk=company.pk).pk, company.pk)
 
-
     # # LINKED_BANK
 
     # linked_bank_name = 'test_linked_bank'
@@ -212,7 +210,6 @@ class ModelTests(TestCase):
     #     )
     #     self.assertEqual(linked_bank.name, self.linked_bank_name)
     #     self.assertEqual(linked_bank.web_portal_url, self.linked_bank_url)
-
 
     # BANK_ACCOUNT
 
