@@ -80,7 +80,7 @@ URL relationship diagram: https://lucid.app/lucidchart/09f82465-b143-4aa5-ae47-e
 At the top level really is the company object. A company is always linked to a user, as is a user always linked to a company (though user can have personal email in which case their company will be their unique email).
   - The company name will be extracted using the user's work (or personal) email domain via the hunter.io API https://hunter.io/api-documentation/v2
 
-PLAID USES AN OBJ CALLED ITEM. ITEM REFERENCES A USER LOGIN O AN ONLINE BANK. THIS ITEM IS BASICALLY A USER LOGIN TO AN ONLINE BANK ACCT. WILL NEED TO ADD THIS OBJ PERHAPS TO SUBSY FOR FUNCTIONALITY.
+PLAID USES AN OBJ CALLED ITEM. ITEM REFERENCES A USER'S LOGIN CREDENTIALS TO AN ONLINE BANK. SO, ITEM = LINKED BANK. THE ONLY ISSUE THAT COULD ARISE IS IF USER CHANGES THEIR LOGIN CREDENTIALS, THEN WILL RETURN ERROR AND WILL NEED TO PROMPT USER TO UPDATE THAT. 
 
 A company can also have a LinkedBank. LinkedBank refers to the user-specific log in to their online bank provider (ie Chase online bank).A linked bank, as opposed to just a bank, refers to a company user's link to their online bank. This is different from just referring to a bank, where Chase has millions of clients which would be considered a bank.
   - PLAID API will be used to integrate a user's online bank into our API
