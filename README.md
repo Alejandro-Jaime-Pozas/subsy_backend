@@ -77,27 +77,41 @@ Once we have all of your bank accounts/credit cards/paypal, etc, MySubs will
 
 URL relationship diagram: https://lucid.app/lucidchart/09f82465-b143-4aa5-ae47-e29c728e4c5c/edit?viewport_loc=-2398%2C-2540%2C3206%2C1144%2C0_0&invitationId=inv_fc19301a-e399-41a6-8355-1f9ccf2add46
 
+
 At the top level really is the company object. A company is always linked to a user, as is a user always linked to a company (though user can have personal email in which case their company will be their unique email).
   - The company name will be extracted using the user's work (or personal) email domain via the hunter.io API https://hunter.io/api-documentation/v2
 
-PLAID USES AN OBJ CALLED ITEM. ITEM REFERENCES A USER'S LOGIN CREDENTIALS TO AN ONLINE BANK. SO, ITEM = LINKED BANK. THE ONLY ISSUE THAT COULD ARISE IS IF USER CHANGES THEIR LOGIN CREDENTIALS, THEN WILL RETURN ERROR AND WILL NEED TO PROMPT USER TO UPDATE THAT. 
 
 A company can also have a LinkedBank. LinkedBank refers to the user-specific log in to their online bank provider (ie Chase online bank).A linked bank, as opposed to just a bank, refers to a company user's link to their online bank. This is different from just referring to a bank, where Chase has millions of clients which would be considered a bank.
+  - PLAID USES AN OBJ CALLED ITEM which includes the user's online bank provider details as well as all of the bank accts for that user's online bank. ITEM REFERENCES A USER'S LOGIN CREDENTIALS (not a single login) TO AN ONLINE BANK. SO, ITEM = LINKED BANK. THE ONLY ISSUE THAT COULD ARISE IS IF USER CHANGES THEIR LOGIN CREDENTIALS, THEN WILL RETURN ERROR AND WILL NEED TO PROMPT USER TO UPDATE THAT (read plaid docs for this).
   - PLAID API will be used to integrate a user's online bank into our API
-  - Still unsure how the relationship bw PLAID API & Subsy API will work
+  - PLAID API REFERENCE
+  - /accounts/balance/get https://plaid.com/docs/api/products/balance/#accountsbalanceget
+    - returns ITEM/LINKED BANK and a list of all ACCOUNTS
+    - this endpoint COULD POTENTIALLY HAVE LATENCY, as plaid backend can take 10-30 secs to resolve request, check for that.
+    - this endpoint better than /accounts/get since fetches latest, not cached, request for all item accounts.
+
+
+
 
 So a linked bank is a user-specific log in to their online bank, which can have multiple bank accounts. a bank acct could be for example a 'savings', 'checking', 'cd', '401k' or other account. A bank account should be unique and have an account number and routing number in most cases.
 
+
 A bank account then can have transactions within it. Each transaction is specific to a unique bank account. A transaction is any monetary value exchange between the user's bank account and any other entity.
 
+
 A transaction then can **possibly** indicate there's an application involved. An application can have multiple transactions (suppose a user subscribes to Netflix, the user will have multiple monthly transactions for 1 subscription, Netflix in this case) within the same company or between different companies since **applications are globally scoped**.
+
 
 An application exists outside of our django app universe (in a sense) and does not need to be linked to a subscription. Applications are the equivalent of a software platform like Notion, Slack, etc. They exist outside the scope of our universe. A subscription is always linked to an application.
   - To implement application creation, could either find an existing API that somehow contains most online subscription platforms, or could create the application when considering a transaction that is referencing an application that does not yet exist in our django app universe. Example, django app has Snowflake and Azure as apps only, a new transaction comes in from user bank that is AWS, so AWS is checked in db, and created since it did not exist.
 
+
 A subscription is for the purposes of our specific django app universe, a software platform of some form that the company subscribes to in a given, **uninterrupted** time period. It is not the application itself, it is a set of details usually including a payment for the services of that application in a given time period. If a subscription is cancelled and then resumed, it will still NOT count as the same subscription. Bill payments for utilities are NOT a subscription. Payment to a supplier is NOT a subscription. A subscription is an online software platform like Notion, Slack, Google Suite, AWS, Snowflake, Sales Nav, etc that is utilized within the company.
 
+
 A subscription then can also have tags for different purposes, such as what specific company dept the sub belongs to. A tag can exist on its own (to have a set of default tags), or it can be linked to a sub. There could be different types of tags, should outline this better.
+
 
 A subscription can also be linked to a sub manager, which is the user managing that specific subscription. This user can either be active or passive within the platform, but they essentially (but not directly within the app), dictate whether the subscription should be modified in any way perhaps.
 
